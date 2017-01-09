@@ -18,18 +18,30 @@ public class ParkingManager {
 		return instance;
 	}
 
-	public void registerEntry(Vehicle vehicle) {
-		this.vehicles[position] = vehicle;
+	public void registerEntry(Vehicle vehicle) throws VehicleAlreadyRegistered {
 		
+		if ( this.vehicleRegistered(vehicle) ){
+			throw new VehicleAlreadyRegistered();
+		}
+		
+		this.vehicles[position] = vehicle;			
 		position++;
+				
 	}
 
 	public Vehicle getByPosition(int i) throws IndexOutOfBoundsException {
 		return this.vehicles[i-1];
 	}
 	
-	private boolean verifyVehicle(Vehicle vehicle) throws VehicleAlreadyRegistered{
-		throw new VehicleAlreadyRegistered();
+	private boolean vehicleRegistered(Vehicle vehicleToBeRegistered){
+		
+		for ( Vehicle vehicle : vehicles){
+			if ( vehicle.getBoard().equals(vehicleToBeRegistered.getBoard()) ){
+				return true;
+			}
+		}
+		
+		return false;
 		
 	}
 	

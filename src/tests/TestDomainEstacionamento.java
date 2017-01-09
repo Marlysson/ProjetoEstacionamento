@@ -29,7 +29,7 @@ public class TestDomainEstacionamento {
 	}
 	
 	@Test
-	public void testDeveRegistrarVeiculoNaPrimeiraVaga(){
+	public void testDeveRegistrarVeiculoNaPrimeiraVaga() throws VehicleAlreadyRegistered{
 		
 		Vehicle vehicle = new Vehicle("Fusion","200-2RR3");
 	
