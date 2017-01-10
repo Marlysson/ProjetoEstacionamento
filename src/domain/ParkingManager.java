@@ -36,13 +36,21 @@ public class ParkingManager {
 	private boolean vehicleRegistered(Vehicle vehicleToBeRegistered){
 		
 		for ( Vehicle vehicle : vehicles){
-			if ( vehicle.getBoard().equals(vehicleToBeRegistered.getBoard()) ){
-				return true;
+			
+			if (vehicle != null){
+				if ( vehicle.getBoard().equals(vehicleToBeRegistered.getBoard()) ){
+					return true;
+				}		
 			}
 		}
 		
 		return false;
 		
+	}
+	
+	private int getFirstFreePlace(){
+		// To be implemented
+		return 1;
 	}
 	
 }

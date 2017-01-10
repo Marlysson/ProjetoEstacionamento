@@ -42,7 +42,7 @@ public class TestDomainEstacionamento {
 		assertEquals(vehicle,vehicleInto);
 	}
 	
-	@Test
+	@Test(expected=VehicleAlreadyRegistered.class)
 	public void testDeveGerarUmErroQuandoRegistrarUmCarroJaRegistrado() throws VehicleAlreadyRegistered{
 		
 		ParkingManager manager = ParkingManager.getInstance();
@@ -53,5 +53,24 @@ public class TestDomainEstacionamento {
 		manager.registerEntry(vehicle_1);
 		manager.registerEntry(vehicle_2);
 	}
+//	
+//	@Test
+//	public void testDeveEstacionarVeiculoNaPrimeiraVagaDisponivel() throws VehicleAlreadyRegistered{
+//		
+//		ParkingManager manager = ParkingManager.getInstance();
+//		
+//		Vehicle vehicle_1 = new Vehicle("Fusion","200-2RR3");
+//		Vehicle vehicle_2 = new Vehicle("Fusion","200-2RR4");
+//		
+//		manager.registerEntry(vehicle_1);
+//		manager.registerEntry(vehicle_2);
+//		
+//		Vehicle vehicleFirstPosition = manager.getByPosition(1);
+//		assertEquals(vehicleFirstPosition.getBoard(), vehicle_1.getBoard());
+//		
+//		Vehicle vehicleSecondPosition = manager.getByPosition(2);
+//		assertEquals(vehicleSecondPosition.getBoard(), vehicle_2.getBoard());
+//				
+//	}
 
 }
