@@ -40,7 +40,7 @@ public class ParkingManager {
 				
 	}
 	
-	public void registryOut(Vehicle vehicle) throws VehicleNotRegisteredException{
+	public void registerOut(Vehicle vehicle) throws VehicleNotRegisteredException{
 		
 		if (!this.vehicleRegistered(vehicle)){
 			throw new VehicleNotRegisteredException();
@@ -60,8 +60,12 @@ public class ParkingManager {
 	public int getPositionByBoard(String board){
 		
 		for( int i = 0; i < this.getNumVehicles(); i++){
-			if (this.vehicles[i].getBoard().equals(board)){
-				return i;
+			if (this.vehicles[i] != null){
+
+				if (this.vehicles[i].getBoard().equals(board)){
+					return i;
+				}
+				
 			}
 		}
 		

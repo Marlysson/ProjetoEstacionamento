@@ -28,7 +28,7 @@ public class TestDomainEstacionamento {
 	}
 	
 	@After
-	public void resetandoVagasDoEstacionameto(){
+	public void resetandoVagasDoEstacionamento(){
 		for(int i = 0; i < manager.getVehicles().length ; i++){
 			manager.getVehicles()[i] = null;
 		}
@@ -101,7 +101,7 @@ public class TestDomainEstacionamento {
 		
 		Vehicle vehicle = new Vehicle("Ford Fusion","200-0050");
 		
-		manager.registryOut(vehicle);
+		manager.registerOut(vehicle);
 	}
 	
 	@Test
@@ -122,10 +122,45 @@ public class TestDomainEstacionamento {
 		
 		Vehicle vehicleSelected = manager.getByPosition(3);
 		
-		manager.registryOut(vehicleSelected);
+		manager.registerOut(vehicleSelected);
 		
 		assertNull(manager.getByPosition(3));
 		
 	}
+	
+	@Test
+	public void testDeveRegistrarASaidaDeUmVeiculoIntermediarioEInserirNaPrimeiraPosicaoLivreNaoSendoAPrimeira() throws VehicleAlreadyRegistered, ParkingVehicleFullException, VehicleNotRegisteredException{
+		
+		List<String> boards = Arrays.asList("200-0001","200-0002","200-0003",
+			    							"200-0004","200-0005","200-0006");
+		
+		for( String board : boards){
+			Vehicle vehicle = new Vehicle("Ford Fusion",board);
+			manager.registerEntry(vehicle);
+		}
+		
+		
+		Vehicle firstOut = manager.getByPosition(3);
+		Vehicle secondOut = manager.getByPosition(6);
+		
+		//Registrando a saída do veículo na posição número 3(indice 2) e 6(indice 5);		
+		manager.registerOut(firstOut);
+		manager.registerOut(secondOut);
+		
+		Vehicle new_vehicle = new Vehicle("Ford Fusion","200-EART");
+		manager.registerEntry(new_vehicle);
+		
+		// Verificando usando a busca da posição pela placa
+		// int positionInserted = manager.getPositionByBoard(new_vehicle.getBoard());
+		
+		// Retornando a posição que deveria ter inserido o veículo e verificando que a o carro de tal placa
+		// realmente desejava-se estacionar. é a do carro que
+		
+		Vehicle positionInserted = manager.getByPosition(3);
+		
+		assertEquals(positionInserted.getBoard(),"200-EART");
+	}
 
+	
+	
 }
