@@ -1,7 +1,8 @@
 package domain;
 
-import exceptions.VehicleAlreadyRegistered;
 import exceptions.ParkingVehicleFullException;
+import exceptions.VehicleAlreadyRegistered;
+import exceptions.VehicleNotRegisteredException;
 
 
 public class ParkingManager {
@@ -38,10 +39,34 @@ public class ParkingManager {
 		
 				
 	}
+	
+	public void registryOut(Vehicle vehicle) throws VehicleNotRegisteredException{
+		
+		if (!this.vehicleRegistered(vehicle)){
+			throw new VehicleNotRegisteredException();
+		}
+		
+		int positionOuted = this.getPositionByBoard(vehicle.getBoard());
+		
+		this.vehicles[positionOuted] = null;
+		
+	}
 
 	
 	public Vehicle getByPosition(int i) throws IndexOutOfBoundsException {
 		return this.vehicles[i-1];
+	}
+	
+	public int getPositionByBoard(String board){
+		
+		for( int i = 0; i < this.getNumVehicles(); i++){
+			if (this.vehicles[i].getBoard().equals(board)){
+				return i;
+			}
+		}
+		
+		return -1;
+		
 	}
 	
 	private boolean vehicleRegistered(Vehicle vehicleToBeRegistered){
@@ -65,7 +90,7 @@ public class ParkingManager {
 		
 		for (Vehicle vehicle : vehicles){
 			if (vehicle == null){
-				return i;
+				break;
 			}else{
 				i++;				
 			}

@@ -1,6 +1,6 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +13,7 @@ import domain.ParkingManager;
 import domain.Vehicle;
 import exceptions.ParkingVehicleFullException;
 import exceptions.VehicleAlreadyRegistered;
+import exceptions.VehicleNotRegisteredException;
 
 public class TestDomainEstacionamento {
 		
@@ -79,12 +80,12 @@ public class TestDomainEstacionamento {
 	}
 	
 	@Test(expected=ParkingVehicleFullException.class)
-	public void TestNaoDeveMaisAceitarVeiculosComEstacionamentoCheio() throws VehicleAlreadyRegistered, ParkingVehicleFullException{
+	public void testNaoDeveMaisAceitarVeiculosComEstacionamentoCheio() throws VehicleAlreadyRegistered, ParkingVehicleFullException{
 		
 		List<String> boards = Arrays.asList("200-0001","200-0002","200-0003",
-										"200-0004","200-0005","200-0006",
-										"200-0007","200-0008","200-0009",
-										"200-0010");
+										    "200-0004","200-0005","200-0006",
+										    "200-0007","200-0008","200-0009",
+										    "200-0010");
 		
 		for( String board : boards){
 			Vehicle vehicle = new Vehicle("Ford Fusion",board);
@@ -93,6 +94,38 @@ public class TestDomainEstacionamento {
 		
 		Vehicle vehicleNotAccepted = new Vehicle("Ford Fusion","200-0011");
 		manager.registerEntry(vehicleNotAccepted);
+	}
+	
+	@Test(expected=VehicleNotRegisteredException.class)
+	public void testDeveGerarExcecaoQuandoRegistrarASaidaDeUmVeiculoInexistente() throws VehicleNotRegisteredException{
+		
+		Vehicle vehicle = new Vehicle("Ford Fusion","200-0050");
+		
+		manager.registryOut(vehicle);
+	}
+	
+	@Test
+	public void testDeveLiberarAVagaDoCarroQueEstavaEstacionado() throws VehicleAlreadyRegistered, ParkingVehicleFullException, VehicleNotRegisteredException{
+		/* 
+		 * Registrar vários carros ( uns 6 );
+		 * Registrar a saída de um veículo intermediário selecionado;
+		 * Retornar pela posição e ser igual a null ( indicando que aquela posição o carro foi liberado corretamente );
+		*/
+		
+		List<String> boards = Arrays.asList("200-0001","200-0002","200-0003",
+			    							"200-0004","200-0005","200-0006");
+		
+		for( String board : boards){
+			Vehicle vehicle = new Vehicle("Ford Fusion",board);
+			manager.registerEntry(vehicle);
+		}
+		
+		Vehicle vehicleSelected = manager.getByPosition(3);
+		
+		manager.registryOut(vehicleSelected);
+		
+		assertNull(manager.getByPosition(3));
+		
 	}
 
 }
