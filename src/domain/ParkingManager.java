@@ -1,15 +1,16 @@
 package domain;
 
-import java.util.List;
-
 import exceptions.VehicleAlreadyRegistered;
+import exceptions.ParkingVehicleFullException;
+
 
 public class ParkingManager {
 	
 	private static ParkingManager instance;
 	
-	private Vehicle[] vehicles = new Vehicle[10];
-	private Integer position = 0;
+	private static final int maxPlaces = 10;
+			
+	private Vehicle[] vehicles = new Vehicle[maxPlaces];
 	
 	public static ParkingManager getInstance() {
 		
@@ -20,10 +21,14 @@ public class ParkingManager {
 		return instance;
 	}
 
-	public void registerEntry(Vehicle vehicle) throws VehicleAlreadyRegistered {
+	public void registerEntry(Vehicle vehicle) throws VehicleAlreadyRegistered, ParkingVehicleFullException {
 		
 		if ( this.vehicleRegistered(vehicle) ){
 			throw new VehicleAlreadyRegistered();
+		}
+		
+		if(this.parkinkIsFull()){
+			throw new ParkingVehicleFullException();
 		}
 		
 		
@@ -69,7 +74,32 @@ public class ParkingManager {
 		return i;
 		
 	}
+	
+	private boolean parkinkIsFull(){
 		
+		int numberOfPlaces = 0;
+		
+		for(Vehicle vehicle : vehicles){
+			
+			if (vehicle != null){
+				numberOfPlaces++;
+			}
+		}
+		
+		if (numberOfPlaces == this.getNumVehicles()){
+			return true;
+		}
+		
+		return false;
+		
+		
+	}
+	
+	private int getNumVehicles(){
+		return this.vehicles.length;
+	}
+	
+	
 	public Vehicle[] getVehicles(){
 		return this.vehicles;
 	}
