@@ -3,11 +3,11 @@ package domain;
 public class Vehicle {
 	
 	private String model;
-	private String placa;
+	private String board;
 	
 	public Vehicle(String model, String board){
 		this.model = model;
-		this.placa  = board;
+		this.board  = board;
 	}
 	
 	public String getModel(){
@@ -15,6 +15,10 @@ public class Vehicle {
 	}
 	
 	public String getBoard(){
-		return this.placa;
+		return this.board;
+	}
+	
+	public String toString(){
+		return this.model+" / "+this.board;
 	}
 }

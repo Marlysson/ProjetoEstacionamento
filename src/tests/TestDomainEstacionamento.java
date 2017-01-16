@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import domain.ParkingManager;
@@ -9,14 +11,31 @@ import domain.Vehicle;
 import exceptions.VehicleAlreadyRegistered;
 
 public class TestDomainEstacionamento {
+		
+
+	ParkingManager manager;
+	
+	@Before
+	public void carregaManager(){
+		
+		manager = ParkingManager.getInstance();
+		
+	}
+	
+	@After
+	public void resetandoVagasDoEstacionameto(){
+		for(int i = 0; i < manager.getVehicles().length ; i++){
+			manager.getVehicles()[i] = null;
+		}
+	}
+	
 	
 	@Test
 	public void testDeveRetornarUmSingletonDaClasse(){
 		
-		ParkingManager manager_1 = ParkingManager.getInstance();
-		ParkingManager manager_2 = ParkingManager.getInstance();
+		ParkingManager new_manager = ParkingManager.getInstance();
 		
-		assertEquals(manager_1,manager_2);
+		assertEquals(manager,new_manager);
 	}
 	
 	@Test
@@ -28,24 +47,8 @@ public class TestDomainEstacionamento {
 		assertEquals(vehicle.getBoard(),"X33-2030");
 	}
 	
-	@Test
-	public void testDeveRegistrarVeiculoNaPrimeiraVaga() throws VehicleAlreadyRegistered{
-		
-		Vehicle vehicle = new Vehicle("Fusion","200-2RR3");
-	
-		ParkingManager manager = ParkingManager.getInstance();
-	
-		manager.registerEntry(vehicle);
-		
-		Vehicle vehicleInto = manager.getByPosition(1);
-		
-		assertEquals(vehicle,vehicleInto);
-	}
-	
 	@Test(expected=VehicleAlreadyRegistered.class)
 	public void testDeveGerarUmErroQuandoRegistrarUmCarroJaRegistrado() throws VehicleAlreadyRegistered{
-		
-		ParkingManager manager = ParkingManager.getInstance();
 		
 		Vehicle vehicle_1 = new Vehicle("Fusion","200-2RR3");
 		Vehicle vehicle_2 = new Vehicle("Fusion","200-2RR3");
@@ -53,24 +56,22 @@ public class TestDomainEstacionamento {
 		manager.registerEntry(vehicle_1);
 		manager.registerEntry(vehicle_2);
 	}
-//	
-//	@Test
-//	public void testDeveEstacionarVeiculoNaPrimeiraVagaDisponivel() throws VehicleAlreadyRegistered{
-//		
-//		ParkingManager manager = ParkingManager.getInstance();
-//		
-//		Vehicle vehicle_1 = new Vehicle("Fusion","200-2RR3");
-//		Vehicle vehicle_2 = new Vehicle("Fusion","200-2RR4");
-//		
-//		manager.registerEntry(vehicle_1);
-//		manager.registerEntry(vehicle_2);
-//		
-//		Vehicle vehicleFirstPosition = manager.getByPosition(1);
-//		assertEquals(vehicleFirstPosition.getBoard(), vehicle_1.getBoard());
-//		
-//		Vehicle vehicleSecondPosition = manager.getByPosition(2);
-//		assertEquals(vehicleSecondPosition.getBoard(), vehicle_2.getBoard());
-//				
-//	}
+	
+	@Test
+	public void testDeveEstacionarVeiculoNaPrimeiraVagaDisponivel() throws VehicleAlreadyRegistered{
+		
+		Vehicle vehicle_1 = new Vehicle("Fusion","200-2RR5");
+		Vehicle vehicle_2 = new Vehicle("Fusion","200-2RR4");
+		
+		manager.registerEntry(vehicle_1);
+		manager.registerEntry(vehicle_2);
+		
+		Vehicle vehicleFirstPosition = manager.getByPosition(1);
+		assertEquals(vehicleFirstPosition.getBoard(), vehicle_1.getBoard());
+		
+		Vehicle vehicleSecondPosition = manager.getByPosition(2);
+		assertEquals(vehicleSecondPosition.getBoard(), vehicle_2.getBoard());
+				
+	}
 
 }

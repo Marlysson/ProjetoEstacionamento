@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.List;
+
 import exceptions.VehicleAlreadyRegistered;
 
 public class ParkingManager {
@@ -24,11 +26,15 @@ public class ParkingManager {
 			throw new VehicleAlreadyRegistered();
 		}
 		
-		this.vehicles[position] = vehicle;			
-		position++;
+		
+		int firstPosition = this.getFirstFreePlace();
+		
+		this.vehicles[firstPosition] = vehicle;			
+		
 				
 	}
 
+	
 	public Vehicle getByPosition(int i) throws IndexOutOfBoundsException {
 		return this.vehicles[i-1];
 	}
@@ -49,8 +55,23 @@ public class ParkingManager {
 	}
 	
 	private int getFirstFreePlace(){
-		// To be implemented
-		return 1;
+		
+		int i = 0;
+		
+		for (Vehicle vehicle : vehicles){
+			if (vehicle == null){
+				return i;
+			}else{
+				i++;				
+			}
+		}
+		
+		return i;
+		
+	}
+		
+	public Vehicle[] getVehicles(){
+		return this.vehicles;
 	}
 	
 }
